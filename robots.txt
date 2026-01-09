@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://github.6iedog.com/css-codelab/sitemap.xml
