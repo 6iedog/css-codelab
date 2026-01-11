@@ -6,6 +6,7 @@
     <title>09 - 自适应的椭圆 | CSS Secrets</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://simurai.com/archive/buttons/buttons.css" rel="stylesheet">
     <link href="../../../assets/css/common.css" rel="stylesheet">
 </head>
 <body>
@@ -40,7 +41,72 @@
             <p class="demo-description">使用 CSS 实现自适应的椭圆效果</p>
 
             <div class="demo-box">
-                <!-- Demo content goes here -->
+                <p>自适应椭圆</p>
+                <div style="
+                    width: 300px;
+                    height: 100px ;
+                    background: orange;
+                    border-radius: 50%;
+                "></div>
+
+                <p>圆柱</p>
+                <div style="position: relative">
+                    <div style="
+                        position: absolute;
+                        top: 0;
+                        width: 300px;
+                        height: 100px;
+                        background: orangered;
+                        border-radius: 50%;
+                        border: 2px dashed black;
+                    "></div>
+                    <div style="
+                        position: absolute;
+                        bottom: 0;
+                        width: 300px;
+                        height: 100px;
+                        border-radius: 50%;
+                        border: 2px dashed black;
+                    "></div>
+                    <div style="
+                        width: 300px;
+                        height: 300px;
+                        background: orange;
+                        border-radius: 50% / 50px;
+                    "></div>
+                </div>
+                <p>自适应上半椭圆</p>
+                <div style="
+                    width: 200px;
+                    height: 100px ;
+                    background: orange;
+                    border-radius:50% /100% 100% 0 0;
+                "></div>
+                <p>自适应左半椭圆</p>
+                <div style="
+                    width: 100px;
+                    height: 200px ;
+                    background: orange;
+                    border-radius: 100% 0 0 100% / 50%;
+                "></div>
+                <p>自适应1/4椭圆</p>
+                <div style="
+                    width: 100px;
+                    height: 100px ;
+                    background: orange;
+                    border-radius: 100% 0 0 0;
+                "></div>
+            </div>
+
+            <div class="demo-box">
+                <p>
+                    <a class="link-opacity-75-hover" href="http://simurai.com/archive/buttons">糖果按钮（simurai.com/archive/buttons）</a>
+                </p>
+                <a href="" class="button">Label</a>
+                <a href="" class="button orange">Label</a>
+                <a href="" class="button pink glossy">Label</a>
+                <a href="" class="button blue round">Label</a>
+                <a href="" class="button green" data-icon="★">Label</a>
             </div>
         </div>
     </div>
