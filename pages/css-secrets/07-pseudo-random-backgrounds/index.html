@@ -1,52 +1,83 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>07 - 伪随机背景 | CSS Secrets</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="../assets/common.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07 - 伪随机背景 | CSS Secrets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../../assets/css/common.css" rel="stylesheet">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="../index.html">
-        <i class="bi bi-book me-2"></i>CSS Secrets
-      </a>
-      <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn" data-theme="auto">
-          <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
-        </button>
-        <button type="button" class="btn" data-theme="light">
-          <i class="bi bi-sun me-1"></i><span>亮色</span>
-        </button>
-        <button type="button" class="btn" data-theme="dark">
-          <i class="bi bi-moon me-1"></i><span>暗色</span>
-        </button>
-      </div>
+        <a class="navbar-brand" href="../index.html">
+            <i class="bi bi-book me-2"></i>CSS Secrets
+        </a>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn" data-theme="auto">
+                <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
+            </button>
+            <button type="button" class="btn" data-theme="light">
+                <i class="bi bi-sun me-1"></i><span>亮色</span>
+            </button>
+            <button type="button" class="btn" data-theme="dark">
+                <i class="bi bi-moon me-1"></i><span>暗色</span>
+            </button>
+        </div>
     </div>
-  </nav>
+</nav>
 
-  <div class="container py-4">
+<div class="container py-4">
     <a href="../index.html" class="back-link mb-4 d-inline-block">
-      <i class="bi bi-arrow-left"></i>
-      返回目录
+        <i class="bi bi-arrow-left"></i>
+        返回目录
     </a>
 
     <div class="card">
-      <div class="demo-container">
-        <h1 class="demo-title">07 - 伪随机背景</h1>
-        <p class="demo-description">使用 CSS 实现伪随机背景效果</p>
+        <div class="demo-container">
+            <h1 class="demo-title">07 - 伪随机背景</h1>
+            <p class="demo-description">使用 CSS 实现伪随机背景效果</p>
 
-        <div class="demo-box">
-          <!-- Demo content goes here -->
+            <div class="demo-box">
+                <h2>水平条纹</h2>
+                <div class="mb-4">
+                    <div class="rounded" style="
+                        width: calc(100vw - 220px);
+                        height: 100px ;
+                        background:hsl(20,40%,90%);
+                        background-image:
+                            linear-gradient(90deg,#fb3 11px,transparent 0),
+                            linear-gradient(90deg,#ab4 23px,transparent 0),
+                            linear-gradient(90deg,#655 41px,transparent 0);
+                        background-size:41px 100%,61px 100%,83px 100%;
+                    "></div>
+                </div>
+
+                <p>
+                    “蝉原则”，英文称作“cicada principle”，是一种让事物的重复出现符合“自然随机性”的规则，为什么这么说呢？
+                </p>
+                <p>
+                    “蝉原则”源自于北美，中国似乎并未有这样的说法，这背后是有有故事的：
+                </p>
+                <p>
+                    北美和东亚蝉的种群是不一样的，在东亚蝉的幼虫生活在土中3年5年或7年；但是北美有一种周期蝉（Magicicada），其生命周期为十三年或十七年，也被称为十七年蝉或十三年蝉。东亚的蝉生命周期短，因此，给人感觉好像每年都有很多蝉，而北美的周期蝉的生命周期很长，因此能够让人明显感觉到每隔十几年蝉的数量就会大规模爆发一下，于是就会引发一些科学家的好奇，为什么生命周期是十三年或者十七年呢？
+                </p>
+                <p>
+                    蝉的天敌鸟类其繁荣萧条周期是具有规律性的（一般2至6年），然后不断重复。十三年或者十七年中的13和17都是质数，而吃蝉的鸟类一般寿命都不超过13年，因此就不会遇到上一世代所遇到的天敌。东亚蝉的幼虫生活的年限比较短，可能与东亚的主要鸟类种群寿命不长有关，例如麻雀就2年寿命。
+                </p>
+                <p>
+                    还有一个很重要的原因，就是一片区域的蝉他不止一个种群，而使用质数作为生命周期年数就可以避免钻出泥土时可以和别种群的蝉类一起钻出，这样竞争压力就会小。例如，北美的十七年蝉和十三年蝉每221年才会出现同时爆发的情况。
+                </p>
+                <p>
+                    这种以质数作为循环周期来增加“自然随机性”的策略就称之为“蝉原则”。
+                </p>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/theme.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../../assets/js/theme.js"></script>
 </body>
 </html>

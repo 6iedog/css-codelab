@@ -1,52 +1,155 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>08 - 连续的图像边框 | CSS Secrets</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="../assets/common.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08 - 连续的图像边框 | CSS Secrets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../../assets/css/common.css" rel="stylesheet">
+    <style>
+        @keyframes ants {
+            to {
+                background-position: 100%
+            }
+        }
+    </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="../index.html">
-        <i class="bi bi-book me-2"></i>CSS Secrets
-      </a>
-      <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn" data-theme="auto">
-          <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
-        </button>
-        <button type="button" class="btn" data-theme="light">
-          <i class="bi bi-sun me-1"></i><span>亮色</span>
-        </button>
-        <button type="button" class="btn" data-theme="dark">
-          <i class="bi bi-moon me-1"></i><span>暗色</span>
-        </button>
-      </div>
+        <a class="navbar-brand" href="../index.html">
+            <i class="bi bi-book me-2"></i>CSS Secrets
+        </a>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn" data-theme="auto">
+                <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
+            </button>
+            <button type="button" class="btn" data-theme="light">
+                <i class="bi bi-sun me-1"></i><span>亮色</span>
+            </button>
+            <button type="button" class="btn" data-theme="dark">
+                <i class="bi bi-moon me-1"></i><span>暗色</span>
+            </button>
+        </div>
     </div>
-  </nav>
+</nav>
 
-  <div class="container py-4">
+<div class="container py-4">
     <a href="../index.html" class="back-link mb-4 d-inline-block">
-      <i class="bi bi-arrow-left"></i>
-      返回目录
+        <i class="bi bi-arrow-left"></i>
+        返回目录
     </a>
 
     <div class="card">
-      <div class="demo-container">
-        <h1 class="demo-title">08 - 连续的图像边框</h1>
-        <p class="demo-description">使用 CSS 实现连续的图像边框效果</p>
+        <div class="demo-container">
+            <h1 class="demo-title">08 - 连续的图像边框</h1>
+            <p class="demo-description">有时我们想把一幅图案或图片应用为边框，而不是背景。</p>
 
-        <div class="demo-box">
-          <!-- Demo content goes here -->
+            <div class="demo-box">
+                <div class="mb-4">
+                    <div class="rounded" style="
+                        width: 300px;
+                        height: 140px ;
+                        padding: 1em;
+                        border: 1em solid transparent;
+                        /*background: linear-gradient(white,white),*/
+                        /*            url('../../../assets/images/stone-art.jpg');*/
+                        /*background-size: cover;*/
+                        /*background-clip: padding-box, border-box;*/
+                        /*background-origin: border-box;padding:1em;*/
+                        background:
+                            linear-gradient(white,white) padding-box,
+                            url('../../../assets/images/stone-art.jpg') border-box 0 / cover;
+                    ">
+                        <p>I have a nice stone art</p>
+                        <p>border,don't I look pretty?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h2>信封</h2>
+                <p> background 实现 </p>
+                <div class="mb-4">
+                    <div class="rounded" style="
+                        width: 300px;
+                        height: 140px ;
+                        padding: 1em;
+                        border: 1em solid transparent;
+                        background:linear-gradient(white,white)padding-box,
+                                    repeating-linear-gradient(-45deg,
+                                      red 0,red 12.5%,
+                                      transparent 0,transparent 25%,
+                                      #58a 0,#58a 37.5%,
+                                      transparent 0,transparent 50%)
+                                    0 /5em 5em;
+                    ">
+                        <p>I have a nice stone art</p>
+                        <p>border,don't I look pretty?</p>
+                    </div>
+                </div>
+                <p> border-image 实现 </p>
+                <div class="mb-4">
+                    <div class="rounded" style="
+                        width: 300px;
+                        height: 140px ;
+                        padding:1em;
+                        border:16px solid transparent;
+                        background: #fff;
+                        border-image:16 repeating-linear-gradient(-45deg,
+                                          red 0,red 1em,
+                                          transparent 0,transparent 2em,
+                                          #58a 0,#58a 3em,
+                                          transparent 0,transparent 4em);
+                    ">
+                        <p>I have a nice stone art</p>
+                        <p>border,don't I look pretty?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h2>蚂蚁行军边框</h2>
+                <div class="mb-4">
+                    <div class="rounded" style="
+                        width: 300px;
+                        height: 140px ;
+                        padding: 1em;
+                        border:1px solid transparent;
+                        background:
+                            linear-gradient(white,white)padding-box,
+                            repeating-linear-gradient(-45deg, black 0,black 25%,white 0,white 50%) 0 / .6em .6em;
+                        animation: ants 12s linear infinite;
+                    ">
+                        <p>I have a nice stone art</p>
+                        <p>border,don't I look pretty?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h2>脚注</h2>
+                <div class="mb-4">
+                    <div class="rounded" style="
+                        width: 300px;
+                        height: 140px ;
+                        border-top:.2em solid transparent;
+                        border-image:100% 0 0 linear-gradient(90deg,
+                                                currentColor 4em,
+                                                transparent 0);
+                        padding-top:1em;
+                    ">
+                        <p>I have a nice stone art</p>
+                        <p>border,don't I look pretty?</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/theme.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../../assets/js/theme.js"></script>
 </body>
 </html>
