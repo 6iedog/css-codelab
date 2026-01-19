@@ -172,6 +172,22 @@
                         item.appendChild(svg)
                     }
                 </script>
+                <p class="pt-4">conic-gradient</p>
+
+                <div style="display: flex; gap: 8px;">
+                    <div class="pie-conic" data-value="20">20%</div>
+                    <div class="pie-conic" data-value="60">60%</div>
+                </div>
+                <style>
+                    .pie-conic {
+                        line-height: 100px;
+                        text-align: center;
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 50%;
+                        background: conic-gradient(#655 attr(data-value%), yellowgreen 0);
+                    }
+                </style>
             </div>
         </div>
     </div>
