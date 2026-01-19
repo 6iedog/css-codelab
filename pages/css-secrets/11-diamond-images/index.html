@@ -40,7 +40,31 @@
             <p class="demo-description">使用 CSS 实现菱形图片效果</p>
 
             <div class="demo-box">
-                <!-- Demo content goes here -->
+                <p>基于变形的方案</p>
+                <div style="
+                    width: 300px;
+                    transform: rotate(45deg) scale(0.7042253521126761);
+                    overflow: hidden;
+                ">
+                    <img src="../../../assets/images/adamcatlace.jpg" alt="adamcatlace" style="
+                        width: 300px;
+                        transform: rotate(-45deg) scale(1.42);
+                    ">
+                </div>
+                <p class="pt-4">裁切路径方案</p>
+                <img src="../../../assets/images/adam-sleeping.jpg" alt="adam-sleeping" class="adam-sleeping">
+                <style>
+                    .adam-sleeping {
+                        width: 300px;
+                        clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+                        transition: clip-path 0.5s;
+                    }
+
+                    .adam-sleeping:hover {
+                        width: 300px;
+                        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                    }
+                </style>
             </div>
         </div>
     </div>

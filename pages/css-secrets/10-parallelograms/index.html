@@ -37,10 +37,45 @@
     <div class="card">
         <div class="demo-container">
             <h1 class="demo-title">10 - 平行四边形</h1>
-            <p class="demo-description">使用 CSS 实现平行四边形效果</p>
+            <p class="demo-description">只让容器的形状倾斜，而保持其内容不变</p>
 
             <div class="demo-box">
-                <!-- Demo content goes here -->
+
+                <p>嵌套元素方案</p>
+                <a style="
+                    padding: 12px 32px;
+                    display: inline-block;
+                    background: #bc003f;
+                    transform: skew(-45deg);
+                " href="#empty">
+                    <div style="
+                        transform: skew(45deg);
+                    ">Click !
+                    </div>
+                </a>
+                <p class="pt-4">伪元素方案</p>
+                <div class="button">Click Me!</div>
+                <style>
+                    .button {
+                        z-index: 0;
+                        position: relative;
+                        padding: 12px 32px;
+                        display: inline-block;
+                    }
+
+                    .button::after {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        background: #ea77b4;
+                        transform: skew(-45deg);
+                    }
+                </style>
             </div>
         </div>
     </div>

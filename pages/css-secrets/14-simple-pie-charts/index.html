@@ -40,7 +40,138 @@
             <p class="demo-description">使用 CSS 实现简单的饼图效果</p>
 
             <div class="demo-box">
-                <!-- Demo content goes here -->
+                <p>基于transform的解决方案</p>
+                <div style="display: flex; gap: 8px;">
+                    <div class="pie"></div>
+                    <div class="pie static" style="animation-delay: -20s"></div>
+                    <div class="pie static" style="animation-delay: -60s"></div>
+                </div>
+                <style>
+                    @keyframes spin {
+                        to {
+                            transform: rotate(.5turn);
+                        }
+                    }
+
+                    @keyframes bg {
+                        50% {
+                            background: #655;
+                        }
+                    }
+
+                    .pie {
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 50%;
+                        background: yellowgreen;
+                        background-image: linear-gradient(to right, transparent 50%, #655 0);
+                    }
+
+
+                    .pie::before {
+                        content: '';
+                        display: block;
+                        margin-left: 50%;
+                        height: 100%;
+                        border-radius: 0 100% 100% 0 / 50%;
+                        background-color: inherit;
+                        transform-origin: left;
+                        animation: spin 3s linear infinite, bg 6s step-end infinite;
+                    }
+
+                    .static::before {
+                        /* [其余的样式代码保持原样] */
+                        animation: spin 50s linear infinite,
+                        bg 100s step-end infinite;
+                        animation-play-state: paused;
+                        animation-delay: inherit;
+                    }
+                </style>
+                <p class="pt-4">SVG解决方案</p>
+                <svg class="svg-pie" viewBox="0 0 32 32">
+                    <circle r="16" cx="16" cy="16"/>
+                </svg>
+
+                <svg class="svg-pie static-svg" viewBox="0 0 32 32">
+                    <circle r="16" cx="16" cy="16"/>
+                </svg>
+                <style>
+                    @keyframes fillup {
+                        to {
+                            stroke-dasharray: 158 158;
+                        }
+                    }
+
+                    .svg-pie {
+                        width: 100px;
+                        height: 100px;
+                        transform: rotate(-90deg);
+                        background: yellowgreen;
+                        border-radius: 50%;
+                    }
+
+
+                    .svg-pie circle {
+                        fill: yellowgreen;
+                        stroke: #655;
+                        stroke-width: 32;
+                        stroke-dasharray: 0 158; /* 2π × 25 ≈ 158 */
+                        animation: fillup 5s linear infinite;
+                    }
+
+                    .static-svg circle {
+                        stroke-dasharray: 38 100; /* 可得到比率为38%的扇区 */
+                        animation: none;
+                    }
+                </style>
+
+                <p class="pt-4">动态脚本</p>
+
+                <div style="display: flex; gap: 8px;">
+                    <div class="pie-auto">20%</div>
+                    <div class="pie-auto">60%</div>
+                </div>
+
+                <style>
+                    .pie-auto {
+                        width: 100px;
+                        height: 100px;
+                        display: inline-block;
+                    }
+
+                    .pie-auto svg {
+                        transform: rotate(-90deg);
+                        background-color: yellowgreen;
+                        border-radius: 50%;
+                    }
+
+                    .pie-auto circle {
+                        fill: yellowgreen;
+                        stroke-width: 32;
+                        stroke: #655;
+                    }
+                </style>
+                <script defer>
+                    const pieNode = document.querySelectorAll('.pie-auto')
+                    const NS = 'http://www.w3.org/2000/svg'
+                    for (let i = 0; i < pieNode.length; i++) {
+                        const item = pieNode[i]
+                        const p = parseFloat(item.textContent)
+                        const svg = document.createElementNS(NS, 'svg')
+                        const circle = document.createElementNS(NS, 'circle')
+                        const title = document.createElementNS(NS, 'title')
+                        circle.setAttribute('r', 16)
+                        circle.setAttribute('cx', 16)
+                        circle.setAttribute('cy', 16)
+                        circle.setAttribute('stroke-dasharray', p + ' 100')
+                        svg.setAttribute('viewBox', '0 0 32 32')
+                        title.textContent = item.textContent
+                        item.textContent = ''
+                        svg.appendChild(title)
+                        svg.appendChild(circle)
+                        item.appendChild(svg)
+                    }
+                </script>
             </div>
         </div>
     </div>
