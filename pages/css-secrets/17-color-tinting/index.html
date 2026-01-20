@@ -40,7 +40,37 @@
             <p class="demo-description">使用 CSS 实现染色效果</p>
 
             <div class="demo-box">
-                <!-- Demo content goes here -->
+                <p>基于滤镜的方案</p>
+                <img class="img-filter" src="../../../assets/images/tiger.jpg"/>
+                <style>
+                    .img-filter {
+                        height: 300px;
+                        transition: .5s filter;
+                        filter: sepia(1) saturate(4) hue-rotate(295deg);
+                    }
+
+                    .img-filter:hover,
+                    .img-filter:focus {
+                        filter: none;
+                    }
+                </style>
+                <p class="pt-4">基于混合模式的方案</p>
+                <div class="tinted-image"></div>
+                <style>
+                    .tinted-image {
+                        background-image: url('../../../assets/images/tiger.jpg');
+                        height: 300px;
+                        width: 435px;
+                        background-size: cover;
+                        background-color: hsl(335, 50%, 50%);
+                        background-blend-mode: luminosity;
+                        transition: .5s background-color;
+                    }
+
+                    .tinted-image:hover {
+                        background-color: transparent;
+                    }
+                </style>
             </div>
         </div>
     </div>

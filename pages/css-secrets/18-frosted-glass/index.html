@@ -39,9 +39,36 @@
             <h1 class="demo-title">18 - 毛玻璃效果</h1>
             <p class="demo-description">使用 CSS 实现毛玻璃效果</p>
 
-            <div class="demo-box">
-                <!-- Demo content goes here -->
+            <div style="height: 20vh">
             </div>
+
+            <style>
+                body,
+                .card::before {
+                    background: url("../../../assets/images/tiger.jpg") center / cover fixed;
+                }
+
+                .card {
+                    z-index: 0;
+                    position: relative;
+                    background: hsla(0, 0%, 100%, .3);
+                    overflow: hidden;
+                    padding: 24px;
+                    border-radius: 16px;
+                }
+
+                .card::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: -1;
+                    filter: blur(20px);
+                    margin: -30px;
+                }
+            </style>
         </div>
     </div>
 </div>
