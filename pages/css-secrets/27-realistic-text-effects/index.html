@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,45 +9,154 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="../../../assets/css/common.css" rel="stylesheet">
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg sticky-top">
-    <div class="container">
-        <a class="navbar-brand" href="../index.html">
-            <i class="bi bi-book me-2"></i>CSS Secrets
-        </a>
-        <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn" data-theme="auto">
-                <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
-            </button>
-            <button type="button" class="btn" data-theme="light">
-                <i class="bi bi-sun me-1"></i><span>亮色</span>
-            </button>
-            <button type="button" class="btn" data-theme="dark">
-                <i class="bi bi-moon me-1"></i><span>暗色</span>
-            </button>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-book me-2"></i>CSS Secrets
+            </a>
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn" data-theme="auto">
+                    <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
+                </button>
+                <button type="button" class="btn" data-theme="light">
+                    <i class="bi bi-sun me-1"></i><span>亮色</span>
+                </button>
+                <button type="button" class="btn" data-theme="dark">
+                    <i class="bi bi-moon me-1"></i><span>暗色</span>
+                </button>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container py-4">
-    <a href="../index.html" class="back-link mb-4 d-inline-block">
-        <i class="bi bi-arrow-left"></i>
-        返回目录
-    </a>
+    <div class="container py-4">
+        <a href="../index.html" class="back-link mb-4 d-inline-block">
+            <i class="bi bi-arrow-left"></i>
+            返回目录
+        </a>
 
-    <div class="card">
-        <div class="demo-container">
-            <h1 class="demo-title">27 - 现实中的文字效果</h1>
-            <p class="demo-description">使用 CSS 实现现实中的文字效果</p>
+        <div class="card">
+            <div class="demo-container">
+                <h1 class="demo-title">27 - 现实中的文字效果</h1>
+                <p class="demo-description">使用 CSS 实现现实中的文字效果</p>
 
-            <div class="demo-box">
-                <!-- Demo content goes here -->
+                <div class="demo-box">
+                    <!-- Demo content goes here -->
+
+                    <p>在浅色背景上使用深色文字时​，在底部加上浅色投影通常效果最佳</p>
+                    <div style="
+                    background:hsl(210,13%,60%);
+                    color:hsl(210,13%,30%);
+                    text-shadow:0 1px 1px hsla(0,0%,100%,.8);
+                ">The only way to getrid of a temptation is to yield to it</div>
+                    <div style="
+                    background:hsl(210,13%,40%);
+                    color:hsl(210,13%,75%);
+                    text-shadow:0 -1px 1px black;
+                ">The only way to getrid of a temptation is to yield to it</div>
+
+                </div>
+                <div class="demo-box">
+
+                    <p>镂空字</p>
+                    <div style="
+                    font:500%/1 Rockwell,serif;
+                    background:deeppink;
+                    color:white;
+                    text-shadow:1px 1px black,-1px -1px black,
+                        1px -1px black,-1px 1px black;
+                ">CSS</div>
+
+                    <div style="
+                    font:500%/1 Rockwell,serif;
+                    background:deeppink;
+                    color:white;
+                    text-shadow:0 0 1px black,0 0 1px black,
+                                0 0 1px black,0 0 1px black,
+                                0 0 1px black,0 0 1px black;
+                ">CSS</div>
+
+                    <div class="svg-text"><svg width="2em" height="1.2em">
+                            <use xlink:href="#css" />
+                            <text id="css" y="1em">CSS</text>
+                        </svg></div>
+                    <style>
+                        .svg-text {
+                            font: 500%/1 Rockwell, serif;
+                            background: deeppink;
+                            color: white;
+                        }
+
+                        .svg-text text {
+                            fill: currentColor;
+                        }
+
+                        .svg-text svg {
+                            overflow: visible
+                        }
+
+                        .svg-text use {
+                            stroke: black;
+                            stroke-width: 6;
+                            stroke-linejoin: round;
+                        }
+                    </style>
+                </div>
+
+                <div class="demo-box">
+                    <p>文字外发光效果</p>
+                    <div class="glow">Glow</div>
+                    <style>
+                        .glow {
+                            font: 500%/1 Rockwell, serif;
+                            color: deeppink;
+                            transition: 1s;
+                        }
+
+                        .glow:hover {
+                            /* color: transparent; */
+                            /* filter: blur(.1em); */
+                            text-shadow: 0 0 5px deeppink, 0 0 10px deeppink,
+                                0 0 15px deeppink, 0 0 20px deeppink,
+                                0 0 25px deeppink, 0 0 30px deeppink;
+                        }
+                    </style>
+                </div>
+                <div class="demo-box">
+                    <p>文字突起效果</p>
+                    <div class="td">Glow</div>
+                    <div class="td2">Glow</div>
+                    <style>
+                        .td {
+                            font: 500%/1 Rockwell, serif;
+                            background: #58a;
+                            color: white;
+                            text-shadow: 0 1px hsl(0, 0%, 85%),
+                                0 2px hsl(0, 0%, 80%),
+                                0 3px hsl(0, 0%, 75%),
+                                0 4px hsl(0, 0%, 70%),
+                                0 5px hsl(0, 0%, 65%),
+                                0 5px 10px black;
+                        }
+
+                        .td2 {
+                            font: 500%/1 Rockwell, serif;
+                            color: white;
+                            background: hsl(0, 50%, 45%);
+                            text-shadow: 1px 1px black, 2px 2px black,
+                                3px 3px black, 4px 4px black,
+                                5px 5px black, 6px 6px black,
+                                7px 7px black, 8px 8px black;
+                        }
+                    </style>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../assets/js/theme.js"></script>
 </body>
+
 </html>
