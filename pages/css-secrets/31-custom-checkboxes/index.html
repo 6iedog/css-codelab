@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,45 +9,119 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="../../../assets/css/common.css" rel="stylesheet">
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg sticky-top">
-    <div class="container">
-        <a class="navbar-brand" href="../index.html">
-            <i class="bi bi-book me-2"></i>CSS Secrets
-        </a>
-        <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn" data-theme="auto">
-                <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
-            </button>
-            <button type="button" class="btn" data-theme="light">
-                <i class="bi bi-sun me-1"></i><span>亮色</span>
-            </button>
-            <button type="button" class="btn" data-theme="dark">
-                <i class="bi bi-moon me-1"></i><span>暗色</span>
-            </button>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-book me-2"></i>CSS Secrets
+            </a>
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn" data-theme="auto">
+                    <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
+                </button>
+                <button type="button" class="btn" data-theme="light">
+                    <i class="bi bi-sun me-1"></i><span>亮色</span>
+                </button>
+                <button type="button" class="btn" data-theme="dark">
+                    <i class="bi bi-moon me-1"></i><span>暗色</span>
+                </button>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container py-4">
-    <a href="../index.html" class="back-link mb-4 d-inline-block">
-        <i class="bi bi-arrow-left"></i>
-        返回目录
-    </a>
+    <div class="container py-4">
+        <a href="../index.html" class="back-link mb-4 d-inline-block">
+            <i class="bi bi-arrow-left"></i>
+            返回目录
+        </a>
 
-    <div class="card">
-        <div class="demo-container">
-            <h1 class="demo-title">31 - 自定义复选框</h1>
-            <p class="demo-description">使用 CSS 实现自定义复选框效果</p>
+        <div class="card">
+            <div class="demo-container">
+                <h1 class="demo-title">31 - 自定义复选框</h1>
+                <p class="demo-description">使用 CSS 实现自定义复选框效果</p>
 
-            <div class="demo-box">
-                <!-- Demo content goes here -->
+                <div class="demo-box">
+                    <!-- Demo content goes here -->
+                    <div>
+                        <input type="checkbox" id="awesome" class="checkbox" />
+                        <label for="awesome">Awesome! </label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="disabled" class="checkbox" disabled />
+                        <label for="disabled">Disabled</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="switch" class="switch" />
+                        <label for="switch">Switch</label>
+                    </div>
+                </div>
+
+                <style>
+                    input[class="checkbox"]+label::before {
+                        content: '\a0';
+                        /* 不换行空格 */
+                        display: inline-block;
+                        vertical-align: .2em;
+                        width: .8em;
+                        height: .8em;
+                        margin-right: .2em;
+                        border-radius: .2em;
+                        background: silver;
+                        text-indent: .15em;
+                        line-height: .65;
+                    }
+
+                    input[class="checkbox"]:checked+label::before {
+                        content: '\2713';
+                        background: yellowgreen;
+                    }
+
+                    input[class="checkbox"] {
+                        position: absolute;
+                        clip: rect(0, 0, 0, 0);
+                    }
+
+                    input[class="checkbox"]:focus+label::before {
+                        box-shadow: 0 0 .1em .1em #58a;
+                    }
+
+                    input[class="checkbox"]:disabled+label::before {
+                        background: gray;
+                        box-shadow: none;
+                        color: #555;
+                    }
+
+                    input[class="switch"] {
+                        position: absolute;
+                        clip: rect(0, 0, 0, 0);
+                    }
+
+                    input[class="switch"]+label {
+                        display: inline-block;
+                        padding: .3em .5em;
+                        background: #ccc;
+                        background-image: linear-gradient(#ddd, #bbb);
+                        border: 1px solid rgba(0, 0, 0, .2);
+                        border-radius: .3em;
+                        box-shadow: 0 1px white inset;
+                        text-align: center;
+                        text-shadow: 0 1px 1px white;
+                    }
+
+                    input[class="switch"]:checked+label,
+                    input[class="switch"]:active+label {
+                        box-shadow: .05em .1em .2em rgba(0, 0, 0, .6)inset;
+                        border-color: rgba(0, 0, 0, .3);
+                        background: #bbb;
+                    }
+                </style>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../../../assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../assets/js/theme.js"></script>
 </body>
+
 </html>
