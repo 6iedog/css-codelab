@@ -4,8 +4,8 @@
   "description": "CSS 技巧与实验室",
   "start_url": "/css-codelab/",
   "display": "standalone",
-  "background_color": "#667eea",
-  "theme_color": "#667eea",
+  "background_color": "#0b0c0e",
+  "theme_color": "#0b0c0e",
   "icons": [
     {
       "src": "assets/favicon.png",

@@ -1,6 +1,8 @@
-// CSS Secrets - Theme Manager
+// CSS Codelab - 主题切换
+// 默认跟随系统；用户手动选择后存 localStorage。
 (function () {
     const body = document.body
+    const DEFAULT_MODE = 'auto'
 
     function applyTheme(mode) {
         body.setAttribute('data-theme', mode)
@@ -26,7 +28,7 @@
     }
 
     function updateTheme() {
-        const savedMode = localStorage.getItem('themeMode') || 'auto'
+        const savedMode = localStorage.getItem('themeMode') || DEFAULT_MODE
         if (savedMode === 'dark' || savedMode === 'light') {
             applyTheme(savedMode)
         } else {

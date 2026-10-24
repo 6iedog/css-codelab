@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NN - 页面标题 | 板块名</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!--
+      站点层通用模板，不绑定任何板块。复制到 pages/<板块>/<演示目录>/index.html 后改四处：
+        1. 路径：assets/... → ../../../assets/...（3 层；板块更深就多加一层）
+        2. 导航：品牌名换成板块名，href 与返回链接都改成 ../index.html（板块目录）
+        3. 标注：.demo-kicker 换成「板块名 / 编号」
+        4. 文案：<title>、.demo-title、.demo-description、各块 .demo-label
+      命令见 AGENT.md 第 4 节。
+    -->
+    <link href="assets/css/common.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <!-- 复制到板块后：文字换成板块名，href 改成 ../index.html -->
+        <a class="navbar-brand" href="index.html">
+            <i class="bi bi-code-slash me-2"></i>CSS Codelab
+        </a>
+        <div class="btn-group btn-group-sm" role="group" aria-label="配色模式">
+            <button type="button" class="btn" data-theme="auto" aria-label="跟随系统">
+                <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
+            </button>
+            <button type="button" class="btn" data-theme="light" aria-label="亮色">
+                <i class="bi bi-sun me-1"></i><span>亮色</span>
+            </button>
+            <button type="button" class="btn" data-theme="dark" aria-label="暗色">
+                <i class="bi bi-moon me-1"></i><span>暗色</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <!-- 复制到板块后：href 改成 ../index.html，指向板块目录 -->
+    <a href="index.html" class="back-link">
+        <i class="bi bi-arrow-left"></i>
+        返回目录
+    </a>
+
+    <article class="card">
+        <div class="demo-container">
+            <!-- 标题区：编号 → 标题 → 说明，底部一条发丝线收口 -->
+            <header class="demo-head">
+                <span class="demo-kicker">板块名 / 01</span>
+                <h1 class="demo-title">页面标题</h1>
+                <p class="demo-description">一句话说明这个演示验证了什么，以及怎么判断它生效了。</p>
+            </header>
+
+            <!--
+              每个变体一个 .demo-box。一个概念有多个写法或需要对照时，
+              就继续往下加同样的块，标签写清区别。
+            -->
+            <figure class="demo-box">
+                <figcaption class="demo-label">变体 A · 说明这一块在演示什么</figcaption>
+                <!-- 演示元素 -->
+            </figure>
+
+            <figure class="demo-box">
+                <figcaption class="demo-label">变体 B · 与 A 的差异</figcaption>
+                <!-- 演示元素 -->
+            </figure>
+
+            <!--
+              可选：真正的 CSS 摘出来贴在最后，读者才知道是哪几行生效。
+              不需要就整段删掉。
+            -->
+            <pre class="code-block"><code>.example {
+    property: value;
+}</code></pre>
+        </div>
+    </article>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/theme.js"></script>
+</body>
+</html>

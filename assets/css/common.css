@@ -1,67 +1,76 @@
-/* CSS Secrets - Common Styles */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap");
 
+/* ==========================================================================
+   CSS Codelab — 共享样式
+   两套配色，共用一套字体与几何：
+     暗色 = 深色终端（Dark IDE）—— 近黑底、荧光绿信号色、冷灰发丝线
+     亮色 = 冷白电蓝（Swiss product）—— 纯白底、电蓝信号色、浅灰分割线
+   字体固定为等宽标题 + 无衬线正文，切主题不换字体。
+   颜色只能通过变量使用，组件里不写死色值。
+   ========================================================================== */
+
+/* ---------- 设计令牌：深色（默认，深色终端） ---------- */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-header: #e9ecef;
-  --text-primary: #212529;
-  --text-secondary: #6c757d;
-  --text-link: #0d6efd;
-  --text-link-hover: #0a58ca;
-  --text-chapter: #0d6efd;
-  --border-color: #dee2e6;
-  --shadow-color: rgba(0, 0, 0, 0.08);
-  --chapter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --row-highlight: rgba(13, 110, 253, 0.04);
+  /* 表面与文字 */
+  --bg-primary: #0b0c0e;     /* 页面底 */
+  --bg-surface: #131519;     /* 卡片面 */
+  --bg-secondary: #101216;   /* 演示块 */
+  --bg-header: #171a1f;      /* 代码块 / 表头 */
+  --text-primary: #e8eaed;
+  --text-secondary: #8b949e;
+  --text-link: #4ade80;
+  --text-link-hover: #86efac;
+  --text-chapter: #4ade80;
+
+  /* 线条与阴影 */
+  --border-color: #23262b;
+  --line: rgba(232, 234, 237, 0.13);
+  --line-soft: rgba(232, 234, 237, 0.06);
+  --shadow-color: rgba(0, 0, 0, 0.55);
+
+  /* 强调色：荧光绿，只给编号、关键动作与当前状态 */
+  --accent: #4ade80;
+  --accent-soft: rgba(74, 222, 128, 0.1);
+  --chapter-gradient: linear-gradient(135deg, #171a1f 0%, #0b0c0e 100%);
+  --row-highlight: rgba(74, 222, 128, 0.05);
+  --on-accent: #07120b;      /* 压在强调色上的文字 */
+
+  /* 几何与动效 */
+  --radius: 3px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* 字体：等宽做标题，无衬线做正文 */
+  --font-display: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-body: "IBM Plex Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+/* ---------- 设计令牌：亮色（冷白电蓝） ---------- */
 [data-theme="light"] {
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-header: #e9ecef;
-  --text-primary: #212529;
-  --text-secondary: #6c757d;
-  --text-link: #0d6efd;
-  --text-link-hover: #0a58ca;
-  --text-chapter: #0d6efd;
-  --border-color: #dee2e6;
-  --shadow-color: rgba(0, 0, 0, 0.08);
-  --chapter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --row-highlight: rgba(13, 110, 253, 0.04);
+  --bg-surface: #f5f7fa;
+  --bg-secondary: #f1f3f6;
+  --bg-header: #eaedf2;
+  --text-primary: #0d1117;
+  --text-secondary: #5b6472;
+  --text-link: #2d5bff;
+  --text-link-hover: #1a3fd0;
+  --text-chapter: #2d5bff;
+  --border-color: #e1e6ed;
+  --line: rgba(13, 17, 23, 0.14);
+  --line-soft: rgba(13, 17, 23, 0.07);
+  --shadow-color: rgba(16, 24, 40, 0.1);
+  --accent: #2d5bff;
+  --accent-soft: rgba(45, 91, 255, 0.07);
+  --chapter-gradient: linear-gradient(135deg, #ffffff 0%, #edf1f7 100%);
+  --row-highlight: rgba(45, 91, 255, 0.04);
+  --on-accent: #ffffff;
 }
 
-[data-theme="dark"] {
-  --bg-primary: #212529;
-  --bg-secondary: #2b3035;
-  --bg-header: #343a40;
-  --text-primary: #f8f9fa;
-  --text-secondary: #adb5bd;
-  --text-link: #6ea8fe;
-  --text-link-hover: #9ec5fe;
-  --text-chapter: #6ea8fe;
-  --border-color: #495057;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --chapter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --row-highlight: rgba(110, 168, 254, 0.08);
-}
+/* 跟随系统：theme.js 会在首帧把解析结果写成 light / dark，
+   因此不需要为 auto 单独定义令牌（body 上不会出现 data-theme="auto"）。 */
 
-@media (prefers-color-scheme: dark) {
-  [data-theme="auto"] {
-    --bg-primary: #212529;
-    --bg-secondary: #2b3035;
-    --bg-header: #343a40;
-    --text-primary: #f8f9fa;
-    --text-secondary: #adb5bd;
-    --text-link: #6ea8fe;
-    --text-link-hover: #9ec5fe;
-    --text-chapter: #6ea8fe;
-    --border-color: #495057;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --chapter-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --row-highlight: rgba(110, 168, 254, 0.08);
-  }
-}
-
+/* ---------- 基础 ---------- */
 * {
   box-sizing: border-box;
 }
@@ -69,135 +78,340 @@
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  transition: background 0.3s ease, color 0.3s ease;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease);
 }
 
-/* Navbar */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+/* 键盘焦点必须可见 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 等宽标注：编号、标签、路径 */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 顶栏 ---------- */
 .navbar {
-  background: rgba(248, 249, 250, 0.8) !important;
-  border-bottom: 1px solid var(--border-color);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: var(--bg-primary) !important;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
-[data-theme="dark"] .navbar,
-[data-theme="auto"] .navbar {
-  background: rgba(43, 48, 53, 0.8) !important;
-}
-
-@media (prefers-color-scheme: dark) {
+@supports (background: color-mix(in srgb, red 50%, transparent)) {
+  .navbar,
+  [data-theme="dark"] .navbar,
   [data-theme="auto"] .navbar {
-    background: rgba(43, 48, 53, 0.8) !important;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  [data-theme="auto"] .navbar {
-    background: rgba(248, 249, 250, 0.8) !important;
+    background: color-mix(in srgb, var(--bg-primary) 84%, transparent) !important;
   }
 }
 
 .navbar-brand {
   color: var(--text-primary) !important;
-  font-weight: 600;
-  transition: transform 0.2s ease;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
 }
 
 .navbar-brand:hover {
-  transform: scale(1.02);
+  color: var(--accent) !important;
 }
 
 .navbar-brand .bi {
-  transition: transform 0.3s ease;
+  font-size: 0.95rem;
+  transition: transform 0.3s var(--ease);
 }
 
 .navbar-brand:hover .bi {
-  transform: rotate(-10deg);
+  transform: rotate(-12deg);
 }
 
-/* Theme Buttons */
+/* ---------- 主题切换按钮 ---------- */
+/* 按钮组自身排布：不依赖 Bootstrap 也能严丝合缝。
+   首页不引 Bootstrap，若不显式设 flex，按钮间的 HTML 换行会渲成空隙。 */
+.btn-group {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  vertical-align: middle;
+}
+
 .btn-group .btn {
-  background: var(--bg-secondary);
-  border-color: var(--border-color);
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.7rem;
+  margin: 0;
+  white-space: nowrap;
+  transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
 }
 
-.btn-group .btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: left 0.5s ease;
+/* 相邻按钮共用一条 1px 边，不留缝也不双线 */
+.btn-group .btn + .btn {
+  margin-left: -1px;
 }
 
-.btn-group .btn:hover::before {
-  left: 100%;
+.btn-group .btn:hover,
+.btn-group .btn:focus-visible,
+.btn-group .btn.active {
+  z-index: 1;
 }
+
+.btn-group .btn:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.btn-group .btn:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
 
 .btn-group .btn:hover {
-  background: var(--bg-header);
   color: var(--text-primary);
-  transform: translateY(-1px);
+  border-color: var(--line);
+  background: var(--accent-soft);
 }
 
 .btn-group .btn.active {
-  background: var(--text-link) !important;
-  border-color: var(--text-link) !important;
-  color: #fff !important;
-  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--on-accent) !important;
 }
 
-/* Card */
+/* ---------- 卡片与区块 ---------- */
 .card {
-  background: var(--bg-primary);
-  border-color: var(--border-color);
-  border-radius: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 4px 20px var(--shadow-color);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 1px 2px var(--shadow-color);
+  transition: box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
 }
 
 .card:hover {
-  box-shadow: 0 8px 30px var(--shadow-color);
+  box-shadow: 0 8px 28px var(--shadow-color);
 }
 
-/* Icons */
+/* ---------- 图标 ---------- */
 .bi {
   font-size: 1rem;
 }
 
-/* Animations */
+/* ---------- 演示页框架 ---------- */
+/* 演示页与首页同宽，避免在宽屏上从 1180 跳到 1320 */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1180px;
+  }
+}
+
+.demo-container {
+  padding: 2.5rem 2.5rem 3rem;
+}
+
+/* 标题区：编号 → 标题 → 说明，用发丝线收口 */
+.demo-head {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.demo-kicker {
+  display: block;
+  margin-bottom: 0.85rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.demo-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6rem;
+  color: var(--text-primary);
+}
+
+.demo-description {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* 老页面没有 .demo-head 包裹，用这条补上同一条收口线 */
+.demo-container > .demo-description {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* 演示块：内嵌面 + 发丝边框 + 左上角信号色刻度 */
+.demo-box {
+  position: relative;
+  margin: 0 0 1.25rem;
+  padding: 2rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+/* 最后一个块不再留底距，避免卡片底部多出空档 */
+.demo-box:last-child {
+  margin-bottom: 0;
+}
+
+.demo-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* 变体标签：等宽小字 + 信号色方块，写「变体 A · 说明」 */
+.demo-label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.demo-label::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+
+/* 兼容老写法：块里第一个 <p> 自动当标签 */
+.demo-box > p:first-child:not(.demo-label) {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.code-block {
+  margin: 0;
+  background: var(--bg-header);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 1rem 1.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  overflow-x: auto;
+}
+
+.code-block code {
+  color: inherit;
+  font-family: inherit;
+}
+
+/* ---------- 返回链接 ---------- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+.back-link .bi {
+  font-size: 0.8rem;
+  transition: transform 0.24s var(--ease);
+}
+
+.back-link:hover .bi {
+  transform: translateX(-4px);
+}
+
+/* ---------- 动效 ---------- */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
 .card {
-  animation: fadeInUp 0.5s ease-out;
+  animation: fadeInUp 0.5s var(--ease) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* Mobile */
+/* ---------- 响应式 ---------- */
+@media (max-width: 768px) {
+  .demo-container {
+    padding: 1.75rem 1.25rem 2.25rem;
+  }
+
+  .demo-title {
+    font-size: 1.4rem;
+  }
+
+  .demo-box {
+    padding: 1.5rem 1.15rem;
+  }
+}
+
 @media (max-width: 576px) {
   .navbar .container {
     flex-wrap: nowrap;
@@ -208,8 +422,9 @@ body {
   }
 
   .btn-group .btn {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
   }
 
   .btn-group .btn .bi {
@@ -219,61 +434,4 @@ body {
   .btn-group .btn span {
     display: none;
   }
-}
-
-/* Demo Page Specific */
-.demo-container {
-  padding: 2rem;
-}
-
-.demo-box {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 1.5rem;
-}
-
-.demo-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
-}
-
-.demo-description {
-  color: var(--text-secondary);
-  margin-bottom: 1.5rem;
-}
-
-.code-block {
-  background: var(--bg-header);
-  border-radius: 6px;
-  padding: 1rem;
-  font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
-  font-size: 0.875rem;
-  overflow-x: auto;
-}
-
-/* Back Link */
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-link);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.back-link:hover {
-  color: var(--text-link-hover);
-}
-
-.back-link .bi {
-  transition: transform 0.2s ease;
-}
-
-.back-link:hover .bi {
-  transform: translateX(-3px);
 }
