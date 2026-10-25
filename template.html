@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NN - 页面标题 | 板块名</title>
+    <title>页面标题 | 板块名</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!--
-      站点层通用模板，不绑定任何板块。复制到 pages/<板块>/<演示目录>/index.html 后改四处：
+      站点层通用模板，不绑定任何板块。复制到 pages/<板块>/<演示目录>/index.html 后改五处：
         1. 路径：assets/... → ../../../assets/...（3 层；板块更深就多加一层）
         2. 导航：品牌名换成板块名，href 与返回链接都改成 ../index.html（板块目录）
-        3. 标注：.demo-kicker 换成「板块名 / 编号」
-        4. 文案：<title>、.demo-title、.demo-description、各块 .demo-label
+        3. 标注：.demo-kicker 换成「板块名 / 演示名」，不写编号（编号只出现在目录页）
+        4. 内容：<title>、.doc-title、.doc-lead、各节 <h2>/<h3>，以及左侧目录的条目
+        5. 链接：正文里属性名首次出现改用 <a class="mdn" href="MDN 地址">，地址规则见 AGENT.md 5.4
+      版式是「左侧目录 + 正文流」：正文按标题分段，只有实践案例用 .demo-case 包卡片。
       命令见 AGENT.md 第 4 节。
     -->
     <link href="assets/css/common.css" rel="stylesheet">
@@ -38,47 +40,144 @@
 </nav>
 
 <div class="container py-4">
-    <!-- 复制到板块后：href 改成 ../index.html，指向板块目录 -->
-    <a href="index.html" class="back-link">
-        <i class="bi bi-arrow-left"></i>
-        返回目录
-    </a>
+    <div class="doc">
 
-    <article class="card">
-        <div class="demo-container">
-            <!-- 标题区：编号 → 标题 → 说明，底部一条发丝线收口 -->
-            <header class="demo-head">
-                <span class="demo-kicker">板块名 / 01</span>
-                <h1 class="demo-title">页面标题</h1>
-                <p class="demo-description">一句话说明这个演示验证了什么，以及怎么判断它生效了。</p>
+        <!--
+          左侧目录：一条一个锚点，href 必须和正文里的 id 对上。
+          一级对应 h2、二级对应 h3，二级加 .is-sub（窄屏会自动隐藏，只留一级）。
+        -->
+        <aside class="doc-toc">
+            <p class="toc-cap">本页目录</p>
+            <nav class="toc-nav" aria-label="本页目录">
+                <a class="toc-item" href="#sec-1">第一节 · 原理</a>
+                <a class="toc-item" href="#sec-2">第二节 · 实践案例</a>
+                <a class="toc-item is-sub" href="#sec-2-1">案例里的第二个变体</a>
+                <a class="toc-item" href="#sec-3">第三节 · 对比与结论</a>
+            </nav>
+        </aside>
+
+        <main class="doc-main">
+            <!-- 复制到板块后：href 改成 ../index.html，指向板块目录 -->
+            <a href="index.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                返回目录
+            </a>
+
+            <!-- 标题区：kicker → 标题 → 导语，底部一条实线收口 -->
+            <header class="doc-head">
+                <span class="demo-kicker">板块名 / 演示名</span>
+                <h1 class="doc-title">页面标题</h1>
+                <p class="doc-lead">一句话说清这个特性到底改变了什么，以及读者在这页能看到什么。示例：<a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">contain</a> 不改变任何外观，它只做一件事——告诉浏览器「这个盒子里外互不影响」。</p>
             </header>
 
             <!--
-              每个变体一个 .demo-box。一个概念有多个写法或需要对照时，
-              就继续往下加同样的块，标签写清区别。
+              一节 = 一个 .doc-sec + 一个 h2，h2 的 id 就是目录锚点。
+              写法顺序：先讲原理（.doc-p），再给可动手的案例（.demo-case），
+              然后一条结论（.doc-hint），最后贴关键 CSS（.snippet）。
             -->
-            <figure class="demo-box">
-                <figcaption class="demo-label">变体 A · 说明这一块在演示什么</figcaption>
-                <!-- 演示元素 -->
-            </figure>
+            <section class="doc-sec" id="sec-1">
+                <h2 class="doc-h2">这一节在讲什么</h2>
+                <p class="doc-p">先讲机制，不要先给效果。这一段说明这个特性切断了什么、改变了什么，以及为什么会这样。属性名第一次出现时用 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">contain</a> 这种写法链到 MDN，之后再用普通 <code>行内代码</code> 就行——同一个属性一页只链一次。</p>
+                <p class="doc-p">需要并列的第二种写法、或第二层细节，就再加一个段落；要分小节时用下面这种 h3，并同步加进左侧目录。</p>
+                <pre class="code-block"><code>/* 需要单独展示的机制代码，放这里 */
+<span class="hl">.target { contain: layout; }</span>   <span class="cm">/* .hl 标起作用的那一行，.cm 标注释 */</span></code></pre>
+            </section>
 
-            <figure class="demo-box">
-                <figcaption class="demo-label">变体 B · 与 A 的差异</figcaption>
-                <!-- 演示元素 -->
-            </figure>
+            <section class="doc-sec" id="sec-2">
+                <h2 class="doc-h2">案例 · 可动手的那一块</h2>
+                <p class="doc-p">案例之前的这一段说明怎么操作、看哪里：拖一下、按一下、切换一下，观察哪个盒子发生了什么。</p>
+
+                <!-- 只有实践案例包卡片；说明、结论、代码、表格都走正常文档流 -->
+                <div class="demo-case">
+                    <!-- 演示元素放这里。可开关的写法参考 pages/modern-css/containment/ 里的 .try + .stage -->
+                    <p class="doc-p">演示元素（把这段替换成真正要演示的东西）</p>
+                </div>
+
+                <p class="doc-hint">案例之后的结论：打开后发生了什么，为什么，以及最容易踩的那一条。左侧竖线是强调色，长段落别超过三四行。</p>
+
+                <!-- 关键 CSS：只贴这段演示真正用到的几行 -->
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.example {
+    property: value;       <span class="cm">/* 说明这一行在干什么 */</span>
+    <span class="hl">contain: layout;</span>      <span class="cm">/* ← 真正起作用的那一条 */</span>
+}</code></pre>
+                </div>
+
+                <h3 class="doc-h3" id="sec-2-1">案例里的第二个变体</h3>
+                <p class="doc-p">同一个特性的另一种用法或另一条副作用，同样按「原理 → 案例 → 结论 → 关键 CSS」走一遍。</p>
+                <div class="demo-case">
+                    <p class="doc-p">演示元素</p>
+                </div>
+                <p class="doc-hint">这一条与上一条的差别是什么。</p>
+            </section>
+
+            <section class="doc-sec" id="sec-3">
+                <h2 class="doc-h2">对比与结论</h2>
+                <p class="doc-p">和相邻的特性比着讲才记得住。表格只有横线，不做成卡片；列多的时候靠外层横向滚动，不缩字号硬塞。</p>
+                <div class="doc-table-wrap">
+                    <table class="doc-table">
+                        <thead>
+                        <tr>
+                            <th>取值</th>
+                            <th>隔离什么</th>
+                            <th>能看见的副作用</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>值 A</td>
+                            <td>这一列写行为</td>
+                            <td>这一列写代价</td>
+                        </tr>
+                        <tr>
+                            <td>值 B</td>
+                            <td>与 A 的差别</td>
+                            <td>与 A 的差别</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="doc-hint">收尾给取舍：什么场景选哪个，坑在哪。不写「哪个更好」。</p>
+            </section>
 
             <!--
-              可选：真正的 CSS 摘出来贴在最后，读者才知道是哪几行生效。
-              不需要就整段删掉。
+              页面专属样式写在这里（.doc-main 内部、内容之后）。
+              简单到一两行就直接写 style=""，别在这一大段里加规则。
             -->
-            <pre class="code-block"><code>.example {
-    property: value;
-}</code></pre>
-        </div>
-    </article>
+            <style>
+                /* ---------- 本页专用 ---------- */
+            </style>
+        </main>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/theme.js"></script>
+<script>
+    /* 目录高亮：找出最后一个已经滚过导航栏的标题。原样保留，不要删。 */
+    (function () {
+        var links = [].slice.call(document.querySelectorAll('.toc-item'));
+        var targets = links.map(function (a) {
+            return document.getElementById(a.getAttribute('href').slice(1));
+        });
+
+        function sync() {
+            var active = 0;
+            targets.forEach(function (el, i) {
+                if (el && el.getBoundingClientRect().top <= 96) {
+                    active = i;
+                }
+            });
+            links.forEach(function (a, i) {
+                a.classList.toggle('is-active', i === active);
+            });
+        }
+
+        window.addEventListener('scroll', sync, { passive: true });
+        window.addEventListener('resize', sync);
+        sync();
+    })();
+</script>
 </body>
 </html>

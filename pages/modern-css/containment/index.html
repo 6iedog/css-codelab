@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 包含（contain）| 现代 CSS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../../assets/css/common.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="../index.html">
+            <i class="bi bi-layers me-2"></i>现代 CSS
+        </a>
+        <div class="btn-group btn-group-sm" role="group" aria-label="配色模式">
+            <button type="button" class="btn" data-theme="auto" aria-label="跟随系统">
+                <i class="bi bi-circle-half me-1"></i><span>跟随系统</span>
+            </button>
+            <button type="button" class="btn" data-theme="light" aria-label="亮色">
+                <i class="bi bi-sun me-1"></i><span>亮色</span>
+            </button>
+            <button type="button" class="btn" data-theme="dark" aria-label="暗色">
+                <i class="bi bi-moon me-1"></i><span>暗色</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="doc">
+
+        <aside class="doc-toc">
+            <p class="toc-cap">本页目录</p>
+            <nav class="toc-nav" aria-label="本页目录">
+                <a class="toc-item" href="#quick-ref">速查 · 四种类型</a>
+                <a class="toc-item" href="#mechanism">共用的开关机制</a>
+                <a class="toc-item" href="#layout">layout · 布局隔离</a>
+                <a class="toc-item is-sub" href="#layout-float">浮动不会逃出去</a>
+                <a class="toc-item is-sub" href="#layout-abs">包含块换了参照物</a>
+                <a class="toc-item" href="#paint">paint · 绘制裁剪</a>
+                <a class="toc-item" href="#size">size · 尺寸塌陷</a>
+                <a class="toc-item" href="#style">style · 计数器</a>
+                <a class="toc-item" href="#container-type">container-type</a>
+                <a class="toc-item" href="#content-visibility">content-visibility</a>
+                <a class="toc-item is-sub" href="#hiding">四种隐藏方式</a>
+                <a class="toc-item is-sub" href="#hiding-pick">场景选型</a>
+                <a class="toc-item" href="#practice">项目里怎么写</a>
+            </nav>
+        </aside>
+
+        <main class="doc-main">
+            <a href="../index.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                返回目录
+            </a>
+
+            <header class="doc-head">
+                <span class="demo-kicker">现代 CSS / 包含</span>
+                <h1 class="doc-title">CSS 包含（contain）</h1>
+                <p class="doc-lead"><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">contain</a> 不改变任何外观，它只做一件事：告诉浏览器「这个盒子里外互不影响」。代价是有些以前默认成立的规则会失效。下面每一块都能现场开关，看它到底改变了什么。</p>
+            </header>
+
+            <section class="doc-sec" id="quick-ref">
+                <h2 class="doc-h2">速查：四种类型各自隔离什么</h2>
+                <div class="doc-table-wrap">
+                    <table class="doc-table">
+                        <thead>
+                        <tr>
+                            <th>值</th>
+                            <th>隔离的东西</th>
+                            <th>能看见的副作用</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">layout</a></td>
+                            <td>里外的布局互不影响</td>
+                            <td>变成 BFC、包含块、层叠上下文；外边距不再穿透</td>
+                        </tr>
+                        <tr>
+                            <td><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">paint</a></td>
+                            <td>绘制范围</td>
+                            <td>溢出内容被裁在 padding 边；同样变成 BFC、包含块、层叠上下文</td>
+                        </tr>
+                        <tr>
+                            <td><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">size</a></td>
+                            <td>尺寸</td>
+                            <td>尺寸按「没有子元素」来算，高度可能直接塌成 0</td>
+                        </tr>
+                        <tr>
+                            <td><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">style</a></td>
+                            <td>计数器与引号</td>
+                            <td>不做样式作用域，别当 Shadow DOM 用</td>
+                        </tr>
+                        <tr>
+                            <td><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">content</a></td>
+                            <td>layout + paint + style</td>
+                            <td>不含 size，可以放心大范围用</td>
+                        </tr>
+                        <tr>
+                            <td><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">strict</a></td>
+                            <td>四种全开</td>
+                            <td>包含 size，必须自己给尺寸，否则塌成 0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="doc-sec" id="mechanism">
+                <h2 class="doc-h2">所有演示共用的开关机制</h2>
+                <p class="doc-p">下面每块的结构都一样：一个复选框 + 标签 + 舞台。勾选时用兄弟选择器把 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">contain</a>加到目标元素上，取消勾选就自动回到没有包含的状态——所以你能看到同一个盒子「前 / 后」的差别。</p>
+                <pre class="code-block"><code><span class="cm">/* 结构：input[type=checkbox] + label + .stage &gt; .target */</span>
+<span class="hl">#t-paint:checked ~ .stage .target</span> {
+    contain: paint;   <span class="cm">/* 勾选才生效，取消自动失效 */</span>
+}</code></pre>
+            </section>
+
+            <section class="doc-sec" id="layout">
+                <h2 class="doc-h2">layout · 布局隔离</h2>
+                <p class="doc-p"><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">layout</a> 做的是「把这块从文档流里划出去」：元素成为独立的格式化上下文，同时变成后代 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position" target="_blank" rel="noopener">absolute</a> / <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position" target="_blank" rel="noopener">fixed</a> 的包含块，并自己开一层层叠上下文。外观一点不变，变的是<strong>原来默认成立的那些约定</strong>。下面两个案例分别踩中其中一条。</p>
+
+                <h3 class="doc-h3" id="layout-float">浮动不会从父盒子里逃出去</h3>
+                <p class="doc-p">父盒子只有虚线框和内边距，没写 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/overflow" target="_blank" rel="noopener">overflow</a>，也没写 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/height" target="_blank" rel="noopener">height</a>。关掉时浮动元素会溢出到虚线下面——父盒子的高度只算了右边这段文字。</p>
+                <div class="demo-case">
+                    <div class="try">
+                        <input type="checkbox" id="t-layout">
+                        <label for="t-layout">contain: layout</label>
+                        <div class="stage stage-float">
+                            <div class="target float-host">
+                                <span class="float-el">float<br>120px</span>
+                                我是父盒子里的一段普通文字。浮动元素高 120px，关掉开关时它会从虚线框底部冒出去。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-hint">打开后 <code>layout</code> 让父盒子成为独立的格式化上下文（BFC），浮动的 120px 被算进高度，虚线框把浮动包住了。</p>
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.float-el {
+    float: left;
+    width: 78px;
+    height: 120px;         <span class="cm">/* 浮动元素，不占父盒高度 */</span>
+}
+
+.float-host {              <span class="cm">/* 父盒：没写 overflow，也没写 height */</span>
+    padding: 0.5rem 0.6rem;
+    <span class="hl">contain: layout;</span>      <span class="cm">/* ← 变成独立格式化上下文，包住浮动 */</span>
+}</code></pre>
+                </div>
+
+                <h3 class="doc-h3" id="layout-abs">绝对定位子元素换了参照物</h3>
+                <p class="doc-p">右上角那个小标签是 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position" target="_blank" rel="noopener">position: absolute</a>。关掉时它贴着整个演示块跑，因为中间的父盒子没有定位属性；打开后父盒子成了包含块，标签才回到虚线框里。</p>
+                <div class="demo-case">
+                    <div class="try">
+                        <input type="checkbox" id="t-abs">
+                        <label for="t-abs">contain: layout</label>
+                        <div class="stage">
+                            <div class="target abs-host">
+                                <span class="abs-el">absolute</span>
+                                关掉开关时，标签会跳到这个演示块的最右上角；打开时它才会回到我这条虚线框里。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-hint"><code>layout</code> 和 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">paint</a> 都会让元素成为 <code>absolute</code> / <code>fixed</code> 后代的包含块。这条最容易被忽略：给容器加上 contain，里面原本贴着页面角落的弹出层会突然换位置。</p>
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.abs-el {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;         <span class="cm">/* 相对「最近的包含块」定位 */</span>
+}
+
+.abs-host {
+    <span class="hl">contain: layout;</span>      <span class="cm">/* ← 自己就成了那个包含块 */</span>
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="doc-sec" id="paint">
+                <h2 class="doc-h2">paint · 绘制裁剪</h2>
+                <p class="doc-p">条纹块高 120px，父盒子只有 62px 的内容高度。关掉时条纹会一直画到虚线框外面去。</p>
+                <div class="demo-case">
+                    <div class="try">
+                        <input type="checkbox" id="t-paint">
+                        <label for="t-paint">contain: paint</label>
+                        <div class="stage stage-paint">
+                            <div class="target paint-host">
+                                <div class="spill">我高 120px，父盒子只有 62px</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-hint">打开后 <code>paint</code> 把绘制裁到 padding 边，超出的部分压根不画。它同样会创建包含块和层叠上下文，所以和 <code>layout</code> 的区别只在于「裁不裁」——<a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">content</a> 就是这两者加上 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">style</a>。</p>
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.paint-host {
+    height: 78px;          <span class="cm">/* 扣掉 padding，内容区只有 62px */</span>
+    <span class="hl">contain: paint;</span>       <span class="cm">/* ← 超出 padding 边的一律不绘制 */</span>
+}
+
+.spill {
+    height: 120px;         <span class="cm">/* 多出来的 58px 直接看不见 */</span>
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="doc-sec" id="size">
+                <h2 class="doc-h2">size · 尺寸不再听内容的话</h2>
+                <p class="doc-p">这个盒子里有一个 110px 高的方块，父盒子没写任何高度，尺寸完全由内容撑开。</p>
+                <div class="demo-case">
+                    <div class="try">
+                        <input type="checkbox" id="t-size">
+                        <label for="t-size">contain: size</label>
+                        <div class="stage stage-size">
+                            <div class="target size-host">
+                                <div class="size-inner">我高 110px，是父盒子唯一的内容</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-hint">打开后 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">size</a> 让浏览器按「这个元素没有子元素」来算尺寸，高度立刻塌成 0，只留下两条内边距；方块并没有消失，它只是溢出了这个零高度的盒子——因为这里没有 <code>paint</code> 去裁它。</p>
+                <p class="doc-p">所以单独用 <code>size</code> 几乎没有性能收益，还会把版面搞塌，必须配 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain-intrinsic-size" target="_blank" rel="noopener">contain-intrinsic-size</a>给一个占位尺寸。这也就是 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain" target="_blank" rel="noopener">strict</a> 比 <code>content</code> 危险的原因：<code>strict</code> 含<code>size</code>，<code>content</code> 特意不含。</p>
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.size-host {
+    <span class="hl">contain: size;</span>        <span class="cm">/* ← 尺寸按「没有子元素」算，高度塌成 0 */</span>
+}
+
+.size-inner {
+    height: 110px;         <span class="cm">/* 元素还在，只是溢出了零高度父盒 */</span>
+}
+
+<span class="cm">/* 真实项目里必须补上占位尺寸，否则等于把版面搞塌 */</span>
+.size-host-fixed {
+    contain: size;
+    contain-intrinsic-size: 160px;
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="doc-sec" id="style">
+                <h2 class="doc-h2">style · 计数器被关在盒子里</h2>
+                <p class="doc-p">序号来自 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/counter-increment" target="_blank" rel="noopener">counter-increment</a>。计数器不归某个 <code>li</code> 所有，它是整棵列表共享的一个变量。第二条里那个小标签自己也写了一次 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/counter-increment" target="_blank" rel="noopener">counter-increment: step</a>，同一个计数器被 +1 了两次——这就是「内部计数」。</p>
+                <div class="demo-case">
+                    <div class="try">
+                        <input type="checkbox" id="t-style">
+                        <label for="t-style">contain: style</label>
+                        <div class="stage">
+                            <ol class="num-list">
+                                <li>第一条</li>
+                                <li>
+                                    第二条，里面有一次内部计数
+                                    <span class="cnt-scope"><span class="leak"></span></span>
+                                </li>
+                                <li>第三条</li>
+                                <li>第四条</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-hint">关掉时后面两条会被顶成 4、5；打开后内部那次 increment 只作用在自己的作用域，外面继续是 1、2、3、4。任何后代元素都能改这个计数器，所以才需要 containment 把作用域切断。注意它只隔离计数器（以及引号），<strong>不隔离选择器</strong>，这不是 Shadow DOM。</p>
+                <div class="scope-fig">
+                    <p class="scope-cap">同一个计数器 <code>step</code>，第二条内部多了一次 +1</p>
+                    <div class="scope-row">
+                        <span class="scope-flag">关闭</span>
+                        <div class="scope-chain">
+                            <span class="scope-num">1</span>
+                            <span class="scope-slot">
+                                <span class="scope-num">2</span>
+                                <span class="scope-tag tag-leak">内部 +1</span>
+                            </span>
+                            <span class="scope-num num-leak">4</span>
+                            <span class="scope-num num-leak">5</span>
+                        </div>
+                        <p class="scope-note">这次 +1 泄漏到外面，第 3、4 项被顶成 4、5</p>
+                    </div>
+                    <div class="scope-row">
+                        <span class="scope-flag">打开</span>
+                        <div class="scope-chain">
+                            <span class="scope-num">1</span>
+                            <span class="scope-slot slot-contained">
+                                <span class="scope-num">2</span>
+                                <span class="scope-tag tag-safe">内部 +1</span>
+                            </span>
+                            <span class="scope-num">3</span>
+                            <span class="scope-num">4</span>
+                        </div>
+                        <p class="scope-note">+1 被关在虚线框里，外面照常 3、4</p>
+                    </div>
+                </div>
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.num-list {
+    counter-reset: step;   <span class="cm">/* 计数器挂在列表上，子树共享 */</span>
+}
+
+.num-list &gt; li::before {
+    counter-increment: step;
+    content: counter(step);
+}
+
+.leak::before {            <span class="cm">/* 第二条里的第二次 +1 */</span>
+    content: "内部 +1";
+    counter-increment: step;
+}
+
+.cnt-scope {
+    <span class="hl">contain: style;</span>       <span class="cm">/* ← 这次 +1 不再往外传 */</span>
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="doc-sec" id="container-type">
+                <h2 class="doc-h2">container-type · 容器查询的底座</h2>
+                <p class="doc-p">拖动虚线框右下角改它的宽度。里面这张卡片是按<strong>容器宽度</strong>换布局的，跟浏览器窗口无关。</p>
+                <div class="demo-case">
+                    <div class="stage">
+                        <div class="cq">
+                            <div class="cq-card">
+                                <span class="cq-avatar">40px</span>
+                                <span class="cq-text">
+                                    <strong>这张卡片按容器宽度排版</strong>
+                                    <span>窄的时候头像在上、文字在下</span>
+                                </span>
+                            </div>
+                            <p class="cq-state">
+                                <span class="wide">当前：容器够宽 → 横排</span>
+                                <span class="narrow">当前：容器变窄 → 竖排</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-hint"><a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/CSS/container-type" target="_blank" rel="noopener">container-type: inline-size</a> 会自动套上 <code>layout</code> 和 <code>style</code> 两种包含。容器查询不是另一个孤立特性，它就是 containment 的实际用途——先声明「这块独立」，浏览器才敢按它自己的宽度去算样式。</p>
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.cq {
+    <span class="hl">container-type: inline-size;</span>  <span class="cm">/* ← 同时带上 layout + style 包含 */</span>
+    resize: horizontal;            <span class="cm">/* 拖右下角改宽度，方便观察 */</span>
+    overflow: hidden;
+    width: 62%;
+}
+
+@container (max-width: 380px) {    <span class="cm">/* 量的是容器宽度，不是视口 */</span>
+    .cq-card { flex-direction: column; }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="doc-sec" id="content-visibility">
+                <h2 class="doc-h2">content-visibility · 连渲染都跳过</h2>
+                <p class="doc-p"><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/content-visibility" target="_blank" rel="noopener">content-visibility: hidden</a> 会把内容整个跳过：不绘制、不进 tab 顺序、find-in-page 也搜不到。</p>
+                <div class="demo-case">
+                    <div class="try">
+                        <input type="checkbox" id="t-cv">
+                        <label for="t-cv">content-visibility: hidden</label>
+                        <div class="stage">
+                            <div class="target cv-host">
+                                <p>这段内容在开关打开后会被浏览器「跳过」，而不是简单地隐藏。</p>
+                                <p>跳过内容时会自动加上 layout、style、paint、size 四种包含，所以盒子连高度都没有了。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-hint">这个值适合做折叠面板的收合态。真正实用的是 <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/content-visibility" target="_blank" rel="noopener">auto</a>：元素对用户不可见时跳过渲染，滚回来再补算，配合 <code>contain-intrinsic-size</code> 保住滚动条高度。长列表、长文章用它最划算。</p>
+                <div class="snippet">
+                    <span class="snippet-cap">关键 CSS</span>
+                    <pre class="code-block"><code>.cv-host {
+    <span class="hl">content-visibility: hidden;</span>  <span class="cm">/* ← 整个跳过，连高度都没有 */</span>
+    <span class="cm">/* 自动附带 layout / style / paint / size 四种包含 */</span>
+}
+
+<span class="cm">/* 长列表更常用这个：离屏才跳过，滚回来再补算 */</span>
+.post {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
+}</code></pre>
+                </div>
+
+                <h3 class="doc-h3" id="hiding">四种「隐藏」不是一回事</h3>
+                <div class="cmp">
+                    <p class="cmp-hint">左右滑动可看全部列</p>
+                    <div class="cmp-scroll">
+                        <table class="cmp-table">
+                            <colgroup>
+                                <col style="width: 168px">
+                                <col span="4">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>行为</th>
+                                <th><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/display" target="_blank" rel="noopener">display:none</a></th>
+                                <th><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/visibility" target="_blank" rel="noopener">visibility:hidden</a></th>
+                                <th><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity" target="_blank" rel="noopener">opacity:0</a></th>
+                                <th><a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/content-visibility" target="_blank" rel="noopener">content-visibility:hidden</a></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="cmp-grp"><td colspan="5">布局</td></tr>
+                            <tr>
+                                <td>生成布局盒</td>
+                                <td class="no">—</td><td>✓</td><td>✓</td><td>✓ 自身</td>
+                            </tr>
+                            <tr>
+                                <td>内容撑开父元素</td>
+                                <td class="no">—</td><td>✓</td><td>✓</td><td class="no">否，塌成 0</td>
+                            </tr>
+                            <tr>
+                                <td>内容参与布局计算</td>
+                                <td class="no">—</td><td>✓</td><td>✓</td><td class="no">—</td>
+                            </tr>
+                            <tr>
+                                <td>附加 size containment</td>
+                                <td class="no">—</td><td class="no">—</td><td class="no">—</td><td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>成为后代包含块</td>
+                                <td class="no">—</td><td class="no">—</td><td class="no">—</td><td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>读尺寸</td>
+                                <td>报 0</td><td>正常</td><td>正常</td><td>自身可读</td>
+                            </tr>
+                            <tr class="cmp-grp"><td colspan="5">绘制与合成</td></tr>
+                            <tr>
+                                <td>实际绘制</td>
+                                <td class="no">—</td><td class="no">—</td><td>✓ 全透明</td><td class="no">—</td>
+                            </tr>
+                            <tr>
+                                <td>创建层叠上下文</td>
+                                <td class="no">—</td><td class="no">—</td><td>✓</td><td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>可做过渡动画</td>
+                                <td class="no">—</td><td>只能离散</td><td>✓</td><td class="no">—</td>
+                            </tr>
+                            <tr class="cmp-grp"><td colspan="5">交互</td></tr>
+                            <tr>
+                                <td>鼠标可点中</td>
+                                <td class="no">—</td><td class="no">—</td><td>✓</td><td>仅自身</td>
+                            </tr>
+                            <tr>
+                                <td>Tab 可聚焦</td>
+                                <td class="no">—</td><td class="no">—</td><td>✓</td><td class="no">—</td>
+                            </tr>
+                            <tr>
+                                <td>文本可选中复制</td>
+                                <td class="no">—</td><td class="no">—</td><td>✓</td><td class="no">—</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl+F 页内查找</td>
+                                <td class="no">—</td><td class="no">—</td><td>✓</td><td class="no">—</td>
+                            </tr>
+                            <tr class="cmp-grp"><td colspan="5">语义与输出</td></tr>
+                            <tr>
+                                <td>无障碍树可读</td>
+                                <td class="no">—</td><td class="no">—</td><td>✓</td><td>内容移除</td>
+                            </tr>
+                            <tr>
+                                <td>打印输出</td>
+                                <td class="no">—</td><td>占位空白</td><td>占位空白</td><td>仅外框</td>
+                            </tr>
+                            <tr class="cmp-grp"><td colspan="5">性能</td></tr>
+                            <tr>
+                                <td>重新显示时</td>
+                                <td>重建子树</td><td>仅重绘</td><td>仅改合成</td><td>保留状态</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="cmp-note">① <a class="mdn" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/content-visibility" target="_blank" rel="noopener">content-visibility: hidden</a> 只跳过内容，元素自身的背景和边框照常绘制——它看起来是个空壳。<br>② <code>display: none</code> 的 <code>img</code> 仍会下载（背景图不会）；<code>content-visibility: hidden</code> 里从未渲染过的图片不会被加载。</p>
+                </div>
+
+                <h3 class="doc-h3" id="hiding-pick">什么场景用哪个</h3>
+                <div class="cmp">
+                    <p class="cmp-hint">左右滑动可看全部列</p>
+                    <div class="cmp-scroll">
+                        <table class="cmp-table cmp-plan">
+                            <thead>
+                            <tr>
+                                <th>场景</th>
+                                <th>选它</th>
+                                <th>注意</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>折叠面板、标签页内容</td>
+                                <td><code>content-visibility: hidden</code></td>
+                                <td>高度会塌成 0，要自己给尺寸；没有过渡动画</td>
+                            </tr>
+                            <tr>
+                                <td>需要淡入淡出</td>
+                                <td><code>opacity</code> + <code>visibility</code></td>
+                                <td>过渡结束后再加 <code>visibility: hidden</code>，否则残留交互</td>
+                            </tr>
+                            <tr>
+                                <td>彻底不渲染、不占位</td>
+                                <td><code>display: none</code></td>
+                                <td>切回来要重建整棵子树</td>
+                            </tr>
+                            <tr>
+                                <td>保留占位、暂时不可见</td>
+                                <td><code>visibility: hidden</code></td>
+                                <td>子元素可以设 <code>visible</code> 单独救回来</td>
+                            </tr>
+                            <tr>
+                                <td>藏起原生控件、保留键盘操作</td>
+                                <td><code>opacity: 0</code></td>
+                                <td>必须移到视口外，别留在原地挡住点击</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="doc-sec" id="practice">
+                <h2 class="doc-h2">实际项目里怎么写</h2>
+                <p class="doc-p">真实页面里几乎不会一处处手写 <code>contain</code>，多半是下面这几种固定用法。注意只有确定能自己给尺寸的块才敢用<code>strict</code>。</p>
+                <pre class="code-block"><code>/* 最常见：独立的内容块，不含 size，可以放心大面积加 */
+.article { contain: content; }
+
+/* 手动给尺寸的块，才敢用 strict */
+.fixed-panel {
+    contain: strict;
+    contain-intrinsic-size: 320px;
+}
+
+/* 容器查询：inline-size 自动带上 layout + style 包含 */
+.card-list { container-type: inline-size; }
+
+@container (max-width: 380px) {
+    .card { flex-direction: column; }
+}
+
+/* 长列表：离屏跳过渲染，但要给占位高度 */
+.post {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
+}</code></pre>
+            </section>
+
+            <style>
+                /* ---------- 本页专用：开关 + 舞台 ---------- */
+                .try input {
+                    width: 15px;
+                    height: 15px;
+                    margin: 0 0.5rem 0 0;
+                    vertical-align: -2px;
+                    accent-color: var(--accent);
+                    cursor: pointer;
+                }
+
+                .try label {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.3rem 0.6rem;
+                    border: 1px solid var(--line);
+                    border-radius: var(--radius);
+                    color: var(--text-secondary);
+                    font-family: var(--font-mono);
+                    font-size: 0.76rem;
+                    cursor: pointer;
+                    transition: color 0.18s ease, border-color 0.18s ease;
+                }
+
+                .try label:hover {
+                    color: var(--text-primary);
+                    border-color: var(--accent);
+                }
+
+                .try label::after {
+                    content: "关";
+                    padding: 0 0.32rem;
+                    border-radius: 2px;
+                    background: var(--line-soft);
+                    color: var(--text-secondary);
+                    font-size: 0.68rem;
+                }
+
+                .try input:checked + label::after {
+                    content: "开";
+                    background: var(--accent);
+                    color: var(--on-accent);
+                }
+
+                /* 舞台不再自己画框：外层的 .demo-case 已经是那张卡片 */
+                .stage {
+                    margin-top: 0.9rem;
+                }
+
+                /* 这三块要故意让内容溢出，给下面留出空白，免得压住说明文字 */
+                .stage-float {
+                    margin-bottom: 6rem;
+                }
+
+                .stage-paint {
+                    margin-bottom: 4.5rem;
+                }
+
+                .stage-size {
+                    margin-bottom: 7.5rem;
+                }
+
+                /* 虚线 = 被 contain 作用的那个盒子 */
+                .target {
+                    padding: 0.5rem 0.6rem;
+                    border: 1px dashed var(--accent);
+                    border-radius: 2px;
+                    color: var(--text-secondary);
+                    font-size: 0.86rem;
+                    line-height: 1.65;
+                }
+
+                /* ---------- 对照表：四种隐藏方式 ---------- */
+                .cmp-scroll {
+                    overflow-x: auto;
+                    border: 1px solid var(--line-soft);
+                    border-radius: var(--radius);
+                    background: var(--bg-surface);
+                }
+
+                .cmp-hint {
+                    display: none;
+                    margin: 0 0 0.4rem;
+                    color: var(--text-secondary);
+                    font-size: 0.7rem;
+                }
+
+                @media (max-width: 720px) {
+                    .cmp-hint {
+                        display: block;
+                    }
+                }
+
+                .cmp-table {
+                    width: 100%;
+                    min-width: 620px;
+                    border-collapse: collapse;
+                    font-size: 0.78rem;
+                }
+
+                .cmp-table th {
+                    padding: 0.55rem 0.5rem;
+                    border-bottom: 1px solid var(--line);
+                    background: var(--bg-header);
+                    color: var(--text-secondary);
+                    font-family: var(--font-mono);
+                    font-size: 0.66rem;
+                    font-weight: 500;
+                    letter-spacing: 0.04em;
+                    text-align: center;
+                    white-space: nowrap;
+                }
+
+                .cmp-table th:first-child {
+                    padding-left: 0.7rem;
+                    text-align: left;
+                }
+
+                .cmp-table td {
+                    padding: 0.42rem 0.5rem;
+                    border-bottom: 1px solid var(--line-soft);
+                    text-align: center;
+                    vertical-align: middle;
+                }
+
+                .cmp-table td:first-child {
+                    padding-left: 0.7rem;
+                    color: var(--text-secondary);
+                    text-align: left;
+                    white-space: nowrap;
+                }
+
+                .cmp-table tr:last-child td {
+                    border-bottom: 0;
+                }
+
+                .cmp-table .no {
+                    color: var(--text-secondary);
+                    opacity: 0.55;
+                }
+
+                .cmp-table tbody tr:not(.cmp-grp):hover td {
+                    background: var(--row-highlight);
+                }
+
+                .cmp-grp td {
+                    padding: 0.3rem 0.7rem;
+                    background: var(--bg-secondary);
+                    border-top: 1px solid var(--line);
+                    border-bottom: 1px solid var(--line-soft);
+                    color: var(--text-secondary);
+                    font-family: var(--font-mono);
+                    font-size: 0.64rem;
+                    letter-spacing: 0.1em;
+                }
+
+                .cmp-plan {
+                    min-width: 520px;
+                }
+
+                .cmp-plan td {
+                    text-align: left;
+                    white-space: normal;
+                }
+
+                .cmp-plan td:first-child {
+                    color: var(--text-primary);
+                    white-space: normal;
+                }
+
+                .cmp-plan td:nth-child(2) {
+                    color: var(--text-primary);
+                    font-family: var(--font-mono);
+                    font-size: 0.72rem;
+                }
+
+                .cmp-plan th:nth-child(2),
+                .cmp-plan th:nth-child(3) {
+                    padding-left: 0.6rem;
+                    text-align: left;
+                }
+
+                .cmp-plan td code,
+                .cmp-note code {
+                    padding: 0.08em 0.32em;
+                    border-radius: 2px;
+                    background: var(--bg-header);
+                    color: var(--text-primary);
+                    font-family: var(--font-mono);
+                    font-size: 0.92em;
+                }
+
+                .cmp-note {
+                    margin: 0.5rem 0 0;
+                    padding: 0 0.1rem;
+                    color: var(--text-secondary);
+                    font-size: 0.72rem;
+                    line-height: 1.75;
+                }
+
+                /* ---------- 1. layout：浮动 ---------- */
+                .float-el {
+                    float: left;
+                    display: grid;
+                    place-items: center;
+                    width: 78px;
+                    height: 120px;
+                    margin: 0 0.9rem 0.4rem 0;
+                    border: 1px solid var(--accent);
+                    border-radius: 2px;
+                    background: var(--accent-soft);
+                    color: var(--accent);
+                    font-family: var(--font-mono);
+                    font-size: 0.68rem;
+                    line-height: 1.4;
+                    text-align: center;
+                }
+
+                #t-layout:checked ~ .stage .float-host {
+                    contain: layout;
+                }
+
+                /* ---------- 2. layout：包含块 ---------- */
+                .abs-host {
+                    padding-right: 5.5rem;
+                }
+
+                .abs-el {
+                    position: absolute;
+                    top: 0.5rem;
+                    right: 0.5rem;
+                    padding: 0.12rem 0.45rem;
+                    border-radius: 2px;
+                    background: var(--accent);
+                    color: var(--on-accent);
+                    font-family: var(--font-mono);
+                    font-size: 0.66rem;
+                }
+
+                #t-abs:checked ~ .stage .abs-host {
+                    contain: layout;
+                }
+
+                /* ---------- 3. paint：裁剪 ---------- */
+                .paint-host {
+                    height: 78px;
+                }
+
+                .spill {
+                    height: 120px;
+                    padding: 0.35rem 0.5rem;
+                    border: 1px solid var(--accent);
+                    border-radius: 2px;
+                    background: repeating-linear-gradient(45deg,
+                        var(--accent-soft) 0 6px,
+                        transparent 6px 12px);
+                    color: var(--accent);
+                    font-family: var(--font-mono);
+                    font-size: 0.7rem;
+                }
+
+                #t-paint:checked ~ .stage .paint-host {
+                    contain: paint;
+                }
+
+                /* ---------- 4. size：塌成 0 ---------- */
+                .size-inner {
+                    display: grid;
+                    place-items: center;
+                    height: 110px;
+                    border: 1px solid var(--accent);
+                    border-radius: 2px;
+                    background: var(--accent-soft);
+                    color: var(--accent);
+                    font-family: var(--font-mono);
+                    font-size: 0.76rem;
+                }
+
+                #t-size:checked ~ .stage .size-host {
+                    contain: size;
+                }
+
+                /* ---------- 5. style：计数器 ---------- */
+                .num-list {
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    counter-reset: step;
+                }
+
+                .num-list > li {
+                    padding: 0.3rem 0;
+                    color: var(--text-primary);
+                    font-size: 0.88rem;
+                }
+
+                .num-list > li::before {
+                    counter-increment: step;
+                    content: counter(step);
+                    display: inline-block;
+                    width: 1.8rem;
+                    color: var(--accent);
+                    font-family: var(--font-mono);
+                    font-size: 0.8rem;
+                }
+
+                .leak::before {
+                    content: "内部 +1";
+                    margin-left: 0.5rem;
+                    padding: 0.05rem 0.35rem;
+                    border: 1px solid var(--line);
+                    border-radius: 2px;
+                    color: var(--text-secondary);
+                    font-family: var(--font-mono);
+                    font-size: 0.68rem;
+                    counter-increment: step;
+                }
+
+                #t-style:checked ~ .stage .cnt-scope {
+                    contain: style;
+                }
+
+                /* ---------- 5b. style：作用域示意（静态对照，不跟开关联动） ---------- */
+                .scope-fig {
+                    --leak: #f87171;
+                    margin-top: 1.2rem;
+                    padding: 0.9rem 1rem;
+                    border: 1px solid var(--line-soft);
+                    border-radius: var(--radius);
+                    background: var(--bg-secondary);
+                }
+
+                [data-theme="light"] .scope-fig {
+                    --leak: #c0392b;
+                }
+
+                .scope-cap {
+                    margin: 0 0 0.8rem;
+                    color: var(--text-secondary);
+                    font-size: 0.76rem;
+                }
+
+                .scope-cap code {
+                    padding: 0.1em 0.35em;
+                    border-radius: 2px;
+                    background: var(--bg-header);
+                    color: var(--text-primary);
+                    font-family: var(--font-mono);
+                    font-size: 0.92em;
+                }
+
+                .scope-row {
+                    display: grid;
+                    grid-template-columns: 2.6rem auto 1fr;
+                    gap: 0.4rem 0.9rem;
+                    align-items: start;
+                }
+
+                .scope-row + .scope-row {
+                    margin-top: 0.7rem;
+                }
+
+                .scope-flag {
+                    padding-top: 0.5rem;
+                    color: var(--text-secondary);
+                    font-family: var(--font-mono);
+                    font-size: 0.7rem;
+                }
+
+                .scope-chain {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 0.45rem;
+                }
+
+                .scope-slot {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.25rem;
+                    padding: 0.15rem 0.2rem;
+                    border: 1px dashed transparent;
+                    border-radius: var(--radius);
+                }
+
+                .slot-contained {
+                    border-color: var(--accent);
+                }
+
+                .scope-num {
+                    display: grid;
+                    place-items: center;
+                    width: 2rem;
+                    height: 2rem;
+                    border: 1px solid var(--line);
+                    border-radius: var(--radius);
+                    background: var(--bg-primary);
+                    color: var(--text-primary);
+                    font-family: var(--font-mono);
+                    font-size: 0.86rem;
+                }
+
+                .num-leak {
+                    border-color: var(--leak);
+                    color: var(--leak);
+                }
+
+                .scope-tag {
+                    padding: 0.05rem 0.35rem;
+                    border: 1px solid var(--line);
+                    border-radius: 2px;
+                    font-family: var(--font-mono);
+                    font-size: 0.62rem;
+                    line-height: 1.5;
+                    white-space: nowrap;
+                }
+
+                .tag-leak {
+                    border-color: var(--leak);
+                    color: var(--leak);
+                }
+
+                .tag-safe {
+                    border-color: var(--accent);
+                    color: var(--accent);
+                }
+
+                .scope-note {
+                    margin: 0;
+                    padding-top: 0.42rem;
+                    color: var(--text-secondary);
+                    font-size: 0.76rem;
+                    line-height: 1.6;
+                }
+
+                @media (max-width: 620px) {
+                    .scope-row {
+                        grid-template-columns: 1fr;
+                        row-gap: 0.35rem;
+                    }
+
+                    .scope-flag {
+                        padding-top: 0;
+                    }
+
+                    .scope-note {
+                        padding-top: 0;
+                    }
+                }
+
+                /* ---------- 6. container-type ---------- */
+                .cq {
+                    container-type: inline-size;
+                    resize: horizontal;
+                    overflow: hidden;
+                    width: 62%;
+                    min-width: 190px;
+                    max-width: 100%;
+                    padding: 0.7rem;
+                    border: 1px dashed var(--accent);
+                    border-radius: 2px;
+                }
+
+                .cq-card {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.8rem;
+                }
+
+                .cq-avatar {
+                    flex: none;
+                    display: grid;
+                    place-items: center;
+                    width: 40px;
+                    height: 40px;
+                    border: 1px solid var(--accent);
+                    border-radius: 50%;
+                    background: var(--accent-soft);
+                    color: var(--accent);
+                    font-family: var(--font-mono);
+                    font-size: 0.58rem;
+                }
+
+                .cq-text {
+                    min-width: 0;
+                }
+
+                .cq-text strong {
+                    display: block;
+                    color: var(--text-primary);
+                    font-size: 0.86rem;
+                }
+
+                .cq-text span {
+                    color: var(--text-secondary);
+                    font-size: 0.76rem;
+                }
+
+                .cq-state {
+                    margin: 0.7rem 0 0;
+                    color: var(--text-secondary);
+                    font-family: var(--font-mono);
+                    font-size: 0.7rem;
+                }
+
+                .cq-state .narrow {
+                    display: none;
+                }
+
+                @container (max-width: 380px) {
+                    .cq-card {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 0.5rem;
+                    }
+
+                    .cq-state .wide {
+                        display: none;
+                    }
+
+                    .cq-state .narrow {
+                        display: inline;
+                    }
+                }
+
+                /* ---------- 7. content-visibility ---------- */
+                .cv-host p {
+                    margin: 0 0 0.5rem;
+                }
+
+                .cv-host p:last-child {
+                    margin-bottom: 0;
+                }
+
+                #t-cv:checked ~ .stage .cv-host {
+                    content-visibility: hidden;
+                }
+            </style>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../../assets/js/theme.js"></script>
+<script>
+    /* 目录高亮：找出最后一个已经滚过导航栏的标题 */
+    (function () {
+        var links = [].slice.call(document.querySelectorAll('.toc-item'));
+        var targets = links.map(function (a) {
+            return document.getElementById(a.getAttribute('href').slice(1));
+        });
+
+        function sync() {
+            var active = 0;
+            targets.forEach(function (el, i) {
+                if (el && el.getBoundingClientRect().top <= 96) {
+                    active = i;
+                }
+            });
+            links.forEach(function (a, i) {
+                a.classList.toggle('is-active', i === active);
+            });
+        }
+
+        window.addEventListener('scroll', sync, { passive: true });
+        window.addEventListener('resize', sync);
+        sync();
+    })();
+</script>
+</body>
+</html>

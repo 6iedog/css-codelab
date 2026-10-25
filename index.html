@@ -19,95 +19,8 @@
              亮色 = 冷白电蓝（纯白底 + 电蓝）
            ================================================================== */
 
-        :root {
-            --pad: clamp(20px, 5vw, 64px);
-            --measure: 1180px;
-        }
-
         html {
             scroll-behavior: smooth;
-        }
-
-        body {
-            /* 纸面颗粒：极轻的噪点覆盖，让底色不像纯色块 */
-            position: relative;
-        }
-
-        /* 只给暗色加一点噪点质感；亮色保持纯白，不加颗粒 */
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0;
-            mix-blend-mode: screen;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        body[data-theme="dark"]::after {
-            opacity: 0.035;
-        }
-
-        .shell {
-            position: relative;
-            z-index: 1;
-            max-width: var(--measure);
-            margin: 0 auto;
-            padding: 0 var(--pad);
-        }
-
-        /* ---------- 顶栏 ---------- */
-        .top {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            border-bottom: 1px solid var(--line);
-            background: var(--bg-primary);
-        }
-
-        .top-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            min-height: 68px;
-        }
-
-        @supports (background: color-mix(in srgb, red 50%, transparent)) {
-            .top {
-                background: color-mix(in srgb, var(--bg-primary) 86%, transparent);
-                backdrop-filter: blur(12px) saturate(140%);
-                -webkit-backdrop-filter: blur(12px) saturate(140%);
-            }
-        }
-
-        .wordmark {
-            display: inline-flex;
-            align-items: baseline;
-            gap: 0.42em;
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-            font-size: 1.05rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .wordmark em {
-            color: var(--accent);
-            font-style: normal;
-        }
-
-        .wordmark:hover {
-            color: var(--accent);
-        }
-
-        .top-right {
-            display: flex;
-            align-items: center;
-            gap: 14px;
         }
 
         /* ---------- 首屏 ---------- */
@@ -121,30 +34,6 @@
 
         .hero-main {
             min-width: 0;
-        }
-
-        .kicker {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: clamp(18px, 2.6vw, 30px);
-            color: var(--text-secondary);
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            letter-spacing: 0.04em;
-        }
-
-        .kicker::before {
-            content: "$";
-            color: var(--accent);
-        }
-
-        .kicker::after {
-            content: "";
-            flex: 1;
-            max-width: 120px;
-            height: 1px;
-            background: var(--line);
         }
 
         h1 {
@@ -166,77 +55,6 @@
         .hero-aside {
             padding-bottom: 0.35rem;
             border-bottom: 1px solid var(--line);
-        }
-
-        .lead {
-            margin: 0 0 28px;
-            max-width: 34ch;
-            color: var(--text-primary);
-            font-size: 1.02rem;
-            line-height: 1.75;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            margin: 0;
-            border-top: 1px solid var(--line-soft);
-        }
-
-        .stat {
-            padding: 14px 12px 0 0;
-        }
-
-        .stat + .stat {
-            padding-left: 14px;
-            border-left: 1px solid var(--line-soft);
-        }
-
-        .stat dt {
-            color: var(--text-secondary);
-            font-family: var(--font-body);
-            font-size: 0.74rem;
-            letter-spacing: 0.02em;
-        }
-
-        .stat dd {
-            margin: 2px 0 0;
-            font-family: var(--font-display);
-            font-size: 1.7rem;
-            font-weight: 700;
-            line-height: 1.1;
-            font-variant-numeric: tabular-nums;
-            color: var(--accent);
-        }
-
-        /* ---------- 区块标题 ---------- */
-        .sec {
-            padding: clamp(36px, 5vw, 64px) 0 0;
-        }
-
-        .sec-label {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin: 0 0 4px;
-            color: var(--text-secondary);
-            font-family: var(--font-body);
-            font-size: 0.78rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-        }
-
-        .sec-label::before {
-            content: "/";
-            color: var(--accent);
-            letter-spacing: 0;
-        }
-
-        .sec-label::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: var(--line);
         }
 
         /* ---------- 板块列表：整行可点，悬停擦除底色 ---------- */
@@ -334,58 +152,6 @@
             color: var(--accent);
         }
 
-        /* ---------- 页脚 ---------- */
-        .foot {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            margin-top: clamp(48px, 7vw, 96px);
-            padding: 24px 0 32px;
-            border-top: 1px solid var(--line);
-            color: var(--text-secondary);
-            font-family: var(--font-mono);
-            font-size: 0.68rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        .foot a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.18s ease;
-        }
-
-        .foot a:hover {
-            color: var(--accent);
-        }
-
-        /* ---------- 入场序列：4 组，间隔约 90ms（用 --d 控制错峰） ---------- */
-        @keyframes rise {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        .rev {
-            animation: rise 0.72s var(--ease) both;
-            animation-delay: var(--d, 0s);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .rev {
-                animation: none;
-                opacity: 1;
-                transform: none;
-            }
-        }
-
         /* ---------- 响应式 ---------- */
         @media (max-width: 900px) {
             .hero {
@@ -397,10 +163,6 @@
             .hero-aside {
                 border-bottom: 0;
                 padding-bottom: 0;
-            }
-
-            .lead {
-                max-width: 46ch;
             }
         }
 
@@ -448,11 +210,11 @@
             <dl class="stats">
                 <div class="stat">
                     <dt>板块</dt>
-                    <dd>1</dd>
+                    <dd>2</dd>
                 </div>
                 <div class="stat">
                     <dt>演示</dt>
-                    <dd>47</dd>
+                    <dd>48</dd>
                 </div>
             </dl>
         </div>
@@ -468,6 +230,15 @@
                     <span class="card-desc">《CSS 揭秘》的技巧实验：从边框、形状到动画，每条技巧一个可交互页面。</span>
                 </span>
                 <span class="card-meta">47 演示 · 7 章</span>
+                <span class="card-go" aria-hidden="true">→</span>
+            </a>
+            <a class="project-card rev" href="pages/modern-css/index.html" style="--d: 0.26s">
+                <span class="card-index">02</span>
+                <span class="card-body">
+                    <span class="card-title">现代 CSS</span>
+                    <span class="card-desc">不在书里的那些特性：包含与容器查询、层叠与作用域，一个特性一页，能开能关地验证。</span>
+                </span>
+                <span class="card-meta">1 演示</span>
                 <span class="card-go" aria-hidden="true">→</span>
             </a>
         </div>
